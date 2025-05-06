@@ -79,3 +79,22 @@ here("data-raw/dime/cgm/101.csv") |>
 here("data-raw/dime/cgm/102.csv") |>
   Import_cgm()
 ```
+
+## Importing 101's sleep data with a function 
+```{r}
+Import_sleep <- function(file.path) {
+  sleep <- file.path |>
+    read_csv(
+      show_col_types = FALSE,
+      name_repair = to_snake_case,
+      n_max = 100
+    )
+  return(sleep)
+}
+
+here("data-raw/dime/sleep/101.csv") |>
+  Import_sleep()
+
+here("data-raw/dime/sleep/101.csv") |>
+  Import_sleep()
+```
