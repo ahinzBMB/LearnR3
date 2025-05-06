@@ -82,9 +82,15 @@ here("data-raw/dime/cgm/102.csv") |>
 
 ## Importing 101's sleep data with a function 
 ```{r}
-Import_sleep <- function(file.path) {
-  sleep <- file.path |>
-    read_csv(
+#' Import one sleep participant data
+#'
+#' @param file_path Paht to the file we want to import
+#'
+#' @returns Returns a dataframe
+#'
+Import_sleep <- function(file_path) {
+  sleep <- file_path |>
+    readr::read_csv(
       show_col_types = FALSE,
       name_repair = to_snake_case,
       n_max = 100
