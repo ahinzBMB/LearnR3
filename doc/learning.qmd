@@ -37,3 +37,20 @@ sleep_101 <- here("data-raw/dime/sleep/101.csv") |>
   )
 sleep_101
 ```
+
+## Making a function that add numbers together
+```{r}
+#' Add two numbers together
+#'
+#' @param num1 A number
+#' @param num2 A number
+#'
+#' @returns Returns the sum of the numbers
+#'
+add_numbers <- function(num1, num2) {
+  added <- num1 + num2
+  return(added)
+}
+
+add_numbers(1, 2)
+```
