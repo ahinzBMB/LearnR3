@@ -67,7 +67,7 @@ Import_cgm <- function(file_path) {
   cgm <- file_path |>
     read_csv(
       show_col_types = FALSE,
-      name_repair = to_snake_case,
+      name_repair = snakecase::to_snake_case,
       n_max = 100
     )
   return(cgm)
@@ -84,7 +84,7 @@ here("data-raw/dime/cgm/102.csv") |>
 ```{r}
 #' Import one sleep participant data
 #'
-#' @param file_path Paht to the file we want to import
+#' @param file_path Path to the file we want to import
 #'
 #' @returns Returns a dataframe
 #'
@@ -103,4 +103,32 @@ here("data-raw/dime/sleep/101.csv") |>
 
 here("data-raw/dime/sleep/101.csv") |>
   Import_sleep()
+```
+
+## Import DIME data function
+```{r}
+#' Importing data from DIME dataset
+#'
+#' @param file_path Path to the CSV file
+#'
+#' @returns Returns a dataframe
+#'
+import_dime <- function(file_path) {
+  data <- file_path |>
+    readr::read_csv(
+      show_col_types = FALSE,
+      name_repair = snakecase::to_snake_case,
+      n_max = 100
+    )
+
+  return(data)
+}
+```
+
+```{r}
+here("data-raw/dime/cgm/101.csv") |>
+  import_dime()
+
+here("data-raw/dime/sleep/101.csv") |>
+  import_dime()
 ```
