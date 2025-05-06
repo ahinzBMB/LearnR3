@@ -8,9 +8,24 @@ format: html
 
 ```{r setup}
 #| include: false
+library(tidyverse)
+library(here)
+library(snakecase)
 ```
 
 ```{r}
 # Code chunk
 ```
 
+## Importing CGM data
+By removing () from to_snake_case we can apply the effects of the function to other functions.
+Currently this reads to_snake_case as an object.
+read_csv() is a function. to_snake_case() is a function. to_snake_case is not a function, but an object. The properties of the object can then be integrated into other functions. 
+```{r}
+cgm_101 <- here("data-raw/dime/cgm/101.csv") |>
+  read_csv(
+    show_col_types = FALSE,
+    name_repair = to_snake_case,
+    n_max = 100
+  )
+```
