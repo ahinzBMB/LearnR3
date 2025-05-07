@@ -12,7 +12,10 @@ library(tidyverse)
 library(here)
 library(snakecase)
 library(fs)
+library(stringr)
 source(here("R/functions.R"))
+cgm_data <- here("data-raw/dime/cgm/") |>
+  import_csv_files()
 ```
 
 ```{r}
@@ -137,5 +140,26 @@ here("data-raw/dime/sleep/") |>
   import_csv_files()
 ```
 
-##  
+## Using REGEX for ID extraction
+mutate() creates a new column in the dataframe, this will be put into a new column named id with the id_information from "[:digit:]+"...
+.before adds the column before the specified path. 
+```{r}
+cgm_data |>
+  mutate(
+    id = str_extract(
+      file_path_id, "[:digit:]+\\.csv$"
+    ) |> 
+      str_remove("\\.csv$") |>
+      as.integer(),
+    .before = file_path_id
+  )
+```
+
+
+
+
+
+
+
+
 

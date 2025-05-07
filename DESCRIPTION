@@ -9,6 +9,7 @@ Imports:
     fs,
     here,
     readr,
-    snakecase
+    snakecase,
+    stringr
 Depends: 
     tidyverse
