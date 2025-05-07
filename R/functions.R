@@ -54,3 +54,36 @@ get_participant_id <- function(data) {
 
 # Using REGEX for ID extraction
 # mutate() creates a new column in the dataframe, this will be put into a new column named id with the id_information from "[:digit:]+"...
+
+#' Clearning up dates and timestamps
+#'
+#' @param data
+#' @param column
+#'
+#' @returns
+#'
+prepared_dates <- function(data, column) {
+  prepared_dates <- data |>
+    dplyr::mutate(
+      date = lubridate::as_date({{ column }}),
+      hour = lubridate::hour({{ column }}),
+      .before = {{ column }}
+    )
+  return(prepared_dates)
+}
+
+
+
+#' Clean and prepared the CGM data for joining
+#'
+#' @param data The CGM dataset
+#'
+#' @returns A cleaner dataframe
+#'
+clean_cgm <- function(data) {
+  cleaned <- data |>
+    get_participant_id() |>
+    prepared_dates(device_timestamp) |>
+    dplyr::rename(glucose = historic_glucose_mmol_l)
+  return(cleaned)
+}

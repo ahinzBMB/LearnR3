@@ -18,12 +18,13 @@ source(here("R/functions.R"))
 
 cgm_data <- here("data-raw/dime/cgm/") |>
   import_csv_files() |>
-  get_participant_id()
-
+  clean_cgm()
 
 sleep_data <- here("data-raw/dime/sleep/") |>
   import_csv_files() |>
-  get_participant_id()
+  get_participant_id() |>
+  rename(datetime = date) |>
+  prepared_dates(datetime)
 ```
 
 ```{r}
@@ -31,9 +32,9 @@ sleep_data <- here("data-raw/dime/sleep/") |>
 ```
 
 ## Importing CGM data
-By removing () from to_snake_case we can apply the effects of the function to other functions.
-Currently this reads to_snake_case as an object.
-read_csv() is a function. to_snake_case() is a function. to_snake_case is not a function, but an object. The properties of the object can then be integrated into other functions. 
+
+By removing () from to_snake_case we can apply the effects of the function to other functions. Currently this reads to_snake_case as an object. read_csv() is a function. to_snake_case() is a function. to_snake_case is not a function, but an object. The properties of the object can then be integrated into other functions.
+
 ```{r}
 cgm_101 <- here("data-raw/dime/cgm/101.csv") |>
   read_csv(
@@ -52,6 +53,7 @@ sleep_101
 ```
 
 ## Making a function that add numbers together
+
 ```{r}
 #' Add two numbers together
 #'
@@ -69,6 +71,7 @@ add_numbers(1, 2)
 ```
 
 ## Importing 101's cgm data with a function
+
 ```{r}
 #' Import one cgm participant
 #'
@@ -93,7 +96,8 @@ here("data-raw/dime/cgm/102.csv") |>
   Import_cgm()
 ```
 
-## Importing 101's sleep data with a function 
+## Importing 101's sleep data with a function
+
 ```{r}
 #' Import one sleep participant data
 #'
@@ -119,6 +123,7 @@ here("data-raw/dime/sleep/101.csv") |>
 ```
 
 ## Import DIME data function
+
 ```{r}
 here("data-raw/dime/cgm/101.csv") |>
   import_dime()
@@ -128,6 +133,7 @@ here("data-raw/dime/sleep/101.csv") |>
 ```
 
 ## Importing sleep data using map()
+
 ```{r}
 sleep_files <- here("data-raw/dime/sleep/") |>
   dir_ls(glob = "*.csv")
@@ -148,18 +154,20 @@ here("data-raw/dime/sleep/") |>
   import_csv_files()
 ```
 
+## Summarising with across()
 
-## Working with dates
 ```{r}
 cgm_data |>
-  dplyr::mutate(
-    date = as_date(device_timestamp),
-    hour = hour(device_timestamp), 
-    .before = device_timestamp
-  )
+  summarise(across(glucose, list(mean = mean, sd = sd, median = median)))
 ```
 
+## Summarizing by groups
 
-
-
-
+```{r}
+cgm_data |>
+  select(-contains("timestamp"), -contains("datetime")) |>
+  group_by(pick(-glucose)) |>
+  summarize(across(glucose, list(mean = mean, sd = sd)),
+    .groups = "drop"
+  )
+```
