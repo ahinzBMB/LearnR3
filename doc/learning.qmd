@@ -116,18 +116,26 @@ here("data-raw/dime/sleep/101.csv") |>
   import_dime()
 ```
 
-## Using map()
-
+## Importing sleep data using map()
 ```{r}
-cgm_files <- here("data-raw/dime/cgm/") |>
+sleep_files <- here("data-raw/dime/sleep/") |>
   dir_ls(glob = "*.csv")
 
-cgm_files
+sleep_files
 
-cgm_data <- cgm_files |>
+sleep_data <- sleep_files |>
   map(import_dime) |>
   list_rbind(names_to = "file_path_id")
 
-
-cgm_data
+sleep_data
 ```
+
+```{r}
+here("data-raw/dime/cgm/") |>
+  import_csv_files()
+here("data-raw/dime/sleep/") |>
+  import_csv_files()
+```
+
+##  
+

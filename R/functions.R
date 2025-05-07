@@ -14,3 +14,20 @@ import_dime <- function(file_path) {
 
   return(data)
 }
+
+
+#' Import all DIME csv files in a folder into one data frame.
+#'
+#' @param folder_path the path to the folder that has the csv files
+#'
+#' @returns A single data frame/tibble
+#'
+import_csv_files <- function(folder_path) {
+  files <- folder_path |>
+    fs::dir_ls(glob = "*.csv")
+
+  data <- files |>
+    purrr::map(import_dime) |>
+    purrr::list_rbind(names_to = "file_path_id")
+  return(data)
+}
