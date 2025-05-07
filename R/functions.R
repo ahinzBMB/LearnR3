@@ -31,3 +31,26 @@ import_csv_files <- function(folder_path) {
     purrr::list_rbind(names_to = "file_path_id")
   return(data)
 }
+
+#' Extracting ID from file_path_id
+#'
+#' @param data the assigned data sheet
+#'
+#' @returns A data frame with the file_path_id removed and replaced by only the sample ID.
+#'
+get_participant_id <- function(data) {
+  data <- data |>
+    dplyr::mutate(
+      id = stringr::str_extract(
+        file_path_id, "[:digit:]+\\.csv$"
+      ) |>
+        stringr::str_remove("\\.csv$") |>
+        as.integer(),
+      .before = file_path_id
+    ) |>
+    select(-file_path_id)
+  return(data)
+}
+
+# Using REGEX for ID extraction
+# mutate() creates a new column in the dataframe, this will be put into a new column named id with the id_information from "[:digit:]+"...
