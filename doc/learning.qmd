@@ -23,6 +23,10 @@ cgm_data <- here("data-raw/dime/cgm/") |>
 sleep_data <- here("data-raw/dime/sleep/") |>
   import_csv_files() |>
   clean_sleep()
+
+participant_details <- here("data-raw/dime/participant_details.csv") |>
+  import_dime() |>
+  clean_participant_details()
 ```
 
 ```{r}
@@ -150,7 +154,6 @@ here("data-raw/dime/cgm/") |>
   import_csv_files()
 here("data-raw/dime/sleep/") |>
   import_csv_files()
-
 ```
 
 ## Summarising with across()
@@ -164,3 +167,5 @@ cgm_data \|\> select(-contains("timestamp"), -contains("datetime")) \|\> group_b
 cgm_data \|\> summarize_column(glucose, list(mean = mean, sd = sd))
 
 sleep_data \|\> summarize_column(seconds, sum)
+
+## Pivot longer

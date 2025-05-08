@@ -122,3 +122,19 @@ summarize_column <- function(data, column, functions) {
     )
   return(summarized_data)
 }
+
+#' Convert the participant details data to long format and clean it up
+#'
+#' @param data The DIME participant details data
+#'
+#' @returns A data frame
+#'
+clean_participant_details <- function(data) {
+  cleaned <- data |>
+    tidyr::pivot_longer(tidyselect::ends_with("date"), names_to = NULL, values_to = "date") |>
+    dplyr::group_by(dplyr::pick(-date)) |>
+    tidyr::complete(
+      date = seq(min(date), max(date), by = "1 day")
+    )
+  return(cleaned)
+}
