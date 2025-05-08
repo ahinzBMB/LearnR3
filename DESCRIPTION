@@ -12,6 +12,7 @@ Imports:
     lubridate,
     readr,
     snakecase,
-    stringr
+    stringr,
+    tidyselect
 Depends: 
     tidyverse
