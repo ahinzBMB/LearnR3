@@ -8,8 +8,7 @@ import_dime <- function(file_path) {
   data <- file_path |>
     readr::read_csv(
       show_col_types = FALSE,
-      name_repair = snakecase::to_snake_case,
-      n_max = 100
+      name_repair = snakecase::to_snake_case
     )
 
   return(data)
@@ -95,7 +94,8 @@ clean_sleep <- function(data) {
     get_participant_id() |>
     rename(datetime = date) |>
     prepared_dates(datetime) |>
-    summarize_column(seconds, sum)
+    summarize_column(seconds, list(sum = sum)) |>
+    sleep_types_to_wider()
   return(cleaned_sleep)
 }
 
@@ -138,3 +138,14 @@ clean_participant_details <- function(data) {
     )
   return(cleaned)
 }
+
+sleep_types_to_wider <- function(data) {
+  wider <- data |>
+    tidyr::pivot_wider(
+      names_from = sleep_type,
+      names_prefix = "seconds_",
+      values_from = seconds_sum
+    )
+  return(wider)
+}
+

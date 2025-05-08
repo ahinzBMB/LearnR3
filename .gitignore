@@ -11,3 +11,4 @@ data-raw/dime.zip
 data-raw/dime/
 *.html
 *_files
+data/dime.csv

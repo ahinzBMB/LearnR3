@@ -27,6 +27,12 @@ sleep_data <- here("data-raw/dime/sleep/") |>
 participant_details <- here("data-raw/dime/participant_details.csv") |>
   import_dime() |>
   clean_participant_details()
+
+dime_data <- participant_details |>
+  full_join(cgm_data) |>
+  full_join(sleep_data)
+
+write.csv(dime_data, here("data/dime.csv"))
 ```
 
 ```{r}
@@ -37,7 +43,6 @@ participant_details <- here("data-raw/dime/participant_details.csv") |>
 
 By removing () from to_snake_case we can apply the effects of the function to other functions. Currently this reads to_snake_case as an object. read_csv() is a function. to_snake_case() is a function. to_snake_case is not a function, but an object. The properties of the object can then be integrated into other functions.
 
-```{r}
 cgm_101 <- here("data-raw/dime/cgm/101.csv") |>
   read_csv(
     show_col_types = FALSE,
@@ -52,11 +57,9 @@ sleep_101 <- here("data-raw/dime/sleep/101.csv") |>
     n_max = 100
   )
 sleep_101
-```
 
 ## Making a function that add numbers together
 
-```{r}
 #' Add two numbers together
 #'
 #' @param num1 A number
@@ -70,11 +73,9 @@ add_numbers <- function(num1, num2) {
 }
 
 add_numbers(1, 2)
-```
 
 ## Importing 101's cgm data with a function
 
-```{r}
 #' Import one cgm participant
 #'
 #' @param file_path Path to the file we want to open
@@ -96,11 +97,9 @@ here("data-raw/dime/cgm/101.csv") |>
 
 here("data-raw/dime/cgm/102.csv") |>
   Import_cgm()
-```
 
 ## Importing 101's sleep data with a function
 
-```{r}
 #' Import one sleep participant data
 #'
 #' @param file_path Path to the file we want to import
@@ -122,21 +121,17 @@ here("data-raw/dime/sleep/101.csv") |>
 
 here("data-raw/dime/sleep/101.csv") |>
   Import_sleep()
-```
 
 ## Import DIME data function
 
-```{r}
 here("data-raw/dime/cgm/101.csv") |>
   import_dime()
 
 here("data-raw/dime/sleep/101.csv") |>
   import_dime()
-```
 
 ## Importing sleep data using map()
 
-```{r}
 sleep_files <- here("data-raw/dime/sleep/") |>
   dir_ls(glob = "*.csv")
 
@@ -147,14 +142,11 @@ sleep_data <- sleep_files |>
   list_rbind(names_to = "file_path_id")
 
 sleep_data
-```
 
-```{r}
 here("data-raw/dime/cgm/") |>
   import_csv_files()
 here("data-raw/dime/sleep/") |>
   import_csv_files()
-```
 
 ## Summarising with across()
 
@@ -168,4 +160,6 @@ cgm_data \|\> summarize_column(glucose, list(mean = mean, sd = sd))
 
 sleep_data \|\> summarize_column(seconds, sum)
 
-## Pivot longer
+## Pivot longer or wider
+
+## Joining datasets
